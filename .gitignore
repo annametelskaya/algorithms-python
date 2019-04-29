@@ -1,2 +1,7 @@
+#Python
 .ipynb_checkpoints
 
+#Cpp
+.idea
+cmake-build-debug
+CMakeLists.txt
