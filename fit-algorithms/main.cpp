@@ -1,4 +1,15 @@
+#include <time.h>
 #include "algorithm.h"
+
+void printOne(const vector<vector<double>> &fit) {
+    for (const auto &vector:fit) {
+        cout << "[";
+        for (double processed:vector)
+            cout << processed << " ";
+        cout << "] sum: " << getSum(vector) << ";\n";
+    }
+    cout << "Size:" << fit.size();
+}
 
 void fillBlocksFromKeyboard() {
     string buffer;
@@ -12,6 +23,7 @@ void fillBlocksFromKeyboard() {
 }
 
 void randomFillBlocks() {
+    srand(time(NULL));
     cout << "Input number of blocks: ";
     int size;
     cin >> size;
@@ -23,31 +35,33 @@ void randomFillBlocks() {
 void doNextFit() {
     for (double block : blocks) {
         if (nextFit.empty()) {
-            nextFit.push_back(0);
-        }
-        if (nextFit[nextFit.size() - 1] + block <= 1) {
-            nextFit[nextFit.size() - 1] += block;
+            nextFit.push_back({block});
         } else {
-            nextFit.push_back(block);
+            if (getSum(nextFit[nextFit.size() - 1]) + block <= 1) {
+                nextFit[nextFit.size() - 1].push_back(block);// += block
+            } else {
+                nextFit.push_back({block});
+            }
         }
     }
 }
 
 void doFastFit() {
     for (double block : blocks) {
-        bool isInsert = false;
         if (fastFit.empty()) {
-            fastFit.push_back(0);
-        }
-        for (double &f : fastFit) {
-            if (f + block <= 1) {
-                f += block;
-                isInsert = true;
-                break;
+            fastFit.push_back({block});
+        } else {
+            bool isInsert = false;
+            for (vector<double> &f : fastFit) {
+                if (getSum(f) + block <= 1) {
+                    f.push_back(block);
+                    isInsert = true;
+                    break;
+                }
             }
-        }
-        if (!isInsert) {
-            fastFit.push_back(block);
+            if (!isInsert) {
+                fastFit.push_back({block});
+            }
         }
     }
 }
@@ -55,45 +69,46 @@ void doFastFit() {
 void doSortedFastFit() {
     sort(blocks.begin(), blocks.end(), greater<double>());
     for (double block : blocks) {
-        bool isInsert = false;
         if (sortedFastFit.empty()) {
-            sortedFastFit.push_back(0);
-        }
-        for (double &f : sortedFastFit) {
-            if (f + block <= 1) {
-                f += block;
-                isInsert = true;
-                break;
+            sortedFastFit.push_back({block});
+        } else {
+            bool isInsert = false;
+            for (vector<double> &f : sortedFastFit) {
+                if (getSum(f) + block <= 1) {
+                    f.push_back(block);
+                    isInsert = true;
+                    break;
+                }
             }
-        }
-        if (!isInsert) {
-            sortedFastFit.push_back(block);
+            if (!isInsert) {
+                sortedFastFit.push_back({block});
+            }
         }
     }
 }
 
 void printResult() {
-    cout << endl << "Next Fit: ";
-    cout << "\nBlocks:\t";
-    for (double processed:nextFit)
-        cout << processed << "\t";
-    cout << "\nSize:" << nextFit.size();
-    cout << endl << "Fast Fit: ";
-    cout << "\nBlocks:\t";
-    for (double processed:fastFit)
-        cout << processed << "\t";
-    cout << "\nSize:" << fastFit.size();
+    cout << "\nNext Fit";
+    printOne(nextFit);
+    cout << "\nFast fit";
+    printOne(fastFit);
     cout << endl << "Sorted Fast Fit: ";
-    cout << "\nBlocks:\t";
-    for (double processed:sortedFastFit)
-        cout << processed << "\t";
-    cout << "\nSize:" << sortedFastFit.size();
+    printOne(sortedFastFit);
+}
+
+double getSum(vector<double> vector) {
+    double sum = 0;
+    for (double s = 0; s < vector.size(); s++)
+        sum += vector[s];
+    return sum;
 }
 
 int main() {
     maxSize = 1;
     //fillBlocksFromKeyboard();
     randomFillBlocks();
+    //for (double processed:blocks)
+    //    cout << processed << "\t";
     doNextFit();
     doFastFit();
     doSortedFastFit();
