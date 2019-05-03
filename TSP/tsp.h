@@ -8,17 +8,17 @@ using namespace std;
 
 class Graph {
 private:
-    vector<vector<int>> graph;
     int size;
+    int **graph;
 public:
     Graph(int size);
 
-    const vector<vector<int>> &getGraph() const;
+    int **getGraph() const;
 
     int getSize() const;
 
 };
 
-void printGraph();
+void printGraph(Graph);
 
 #endif //TSP_TSP_H
