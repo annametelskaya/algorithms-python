@@ -2,6 +2,8 @@
 #include <string.h>
 #include <time.h>
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 int posicion;
@@ -104,28 +106,33 @@ void printResult(string text, string pattern) {
         cout << "no substring" << endl;
 }
 
-int main() {
-    string text = "aaabbcccce";
-    string pattern = "cce";
+
+void run(string text, string pattern) {
     cout << "BRUTE-FORCE" << endl;
     srand(time(0));
     posicion = bruteForceSearch(pattern, text);
-    cout << "Time: " << ((float) clock()) / CLOCKS_PER_SEC;
+    cout << "Time: " << clock();
     printResult(text, pattern);
     cout << "BOYER MOORE" << endl;
     srand(time(0));
     posicion = boyerMooreSearch(pattern, text);
-    cout << "Time: " << ((float) clock()) / CLOCKS_PER_SEC;
+    cout << "Time: " << clock();
     printResult(text, pattern);
     cout << "RABIN KARP" << endl;
-    long prime = 101;
+    long prime = 496841;
     srand(time(0));
     posicion = rabinKarpSearch(pattern, text, prime);
-    cout << "Time: " << ((float) clock()) / CLOCKS_PER_SEC;
+    cout << "Time: " << clock();
     printResult(text, pattern);
     cout << "KMP" << endl;
     srand(time(0));
     posicion = kmp(text, pattern);
-    cout << "Time: " << ((float) clock()) / CLOCKS_PER_SEC;
+    cout << "Time: " << clock();
     printResult(text, pattern);
+}
+
+int main() {
+    string text = "ABABDABACDABABCABAB";
+    string pattern = "ABABCABAB";
+    run(text, pattern);
 }
