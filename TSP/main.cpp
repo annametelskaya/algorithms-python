@@ -55,26 +55,6 @@ bool checkVertexInIndex(const vector<int> &path, int j) {
     return true;
 }
 
-vector<int> findPath(int **graph, int size) {
-    vector<int> path;
-    path.push_back(0);
-    for (int i = 0; i < size; i++) {
-        int previousPositionIndex = path[path.size() - 1];
-        int nextPositionIndex = -1;
-        int nextWeight = 999;
-        for (int j = 0; j < size; j++) {
-            int currentWeight = graph[previousPositionIndex][j];
-            if (j != previousPositionIndex && currentWeight < nextWeight && checkVertexInIndex(path, j)) {
-                nextPositionIndex = j;
-                nextWeight = currentWeight;
-            }
-        }
-        if (nextPositionIndex != -1)
-            path.push_back(nextPositionIndex);
-    }
-    return path;
-}
-
 void changePath(Graph graph, vector<int> path) {
     int iterationNumber = 0;
     for (int i = 0; i < path.size() - 1; i++) {
@@ -103,7 +83,7 @@ int main() {
     cin >> size;
     Graph graph(size);
     printGraph(graph);
-    vector<int> path;// = findPath(graph.getGraph(), graph.getSize());
+    vector<int> path;
     for (int i = 0; i < size; i++) {
         path.push_back(i);
     }

@@ -73,27 +73,57 @@ vector<vector<int>> createDFA(string pattern, int patternLen) {
     dfa[pattern[0]][0] = 1;
     for (int x = 0, j = 1; j < patternLen; j++) {
         for (int c = 0; c < R; c++) {
-            dfa[c][j] = dfa[c][x]; // Copy mismatch cases.
+            dfa[c][j] = dfa[c][x];
         }
-        dfa[pattern[j]][j] = j + 1; // Set match case.
-        x = dfa[pattern[j]][x]; // Update restart state.
+        dfa[pattern[j]][j] = j + 1;
+        x = dfa[pattern[j]][x];
     }
-
     return dfa;
 }
 
-int kmp(string text, string pattern) {
-    int patternLen = pattern.length();
-    int textLen = text.length();
-    vector<vector<int>> dfa = createDFA(pattern, patternLen);
-    int i, j;
-    for (i = 0, j = 0; i < textLen && j < patternLen; i++) {
-        j = dfa[text[i]][j];
+
+void computeLPSArray(string pat, int M, int *lps) {
+    int len = 0;
+    lps[0] = 0;
+    int i = 1;
+    while (i < M) {
+        if (pat[i] == pat[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        } else {
+            if (len != 0) {
+                len = lps[len - 1];
+            } else {
+                lps[i] = 0;
+                i++;
+            }
+        }
     }
-    if (j == patternLen) {
-        return i - patternLen;
+}
+
+int KMP(string pattern, string text) {
+    int M = pattern.size();
+    int N = text.size();
+    int lps[M];
+    computeLPSArray(pattern, M, lps);
+    int i = 0;
+    int j = 0;
+    while (i < N) {
+        if (pattern[j] == text[i]) {
+            j++;
+            i++;
+        }
+        if (j == M)
+            return i - j;
+        else if (i < N && pattern[j] != text[i]) {
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
     }
-    return textLen;
+    return text.size();
 }
 
 void printResult(string text, string pattern) {
@@ -126,13 +156,20 @@ void run(string text, string pattern) {
     printResult(text, pattern);
     cout << "KMP" << endl;
     srand(time(0));
-    posicion = kmp(text, pattern);
+    posicion = KMP(pattern, text);
     cout << "Time: " << clock();
     printResult(text, pattern);
 }
 
 int main() {
-    string text = "ABABDABACDABABCABAB";
-    string pattern = "ABABCABAB";
+    string text;
+    string line;
+    ifstream in;
+    in.open("C:\\Users\\annam\\Desktop\\git\\algorithms-term2\\SubStringSearch\\text.txt");
+    while (in) {
+        getline(in, line);
+        text += line;
+    }
+    string pattern = "mind";
     run(text, pattern);
 }

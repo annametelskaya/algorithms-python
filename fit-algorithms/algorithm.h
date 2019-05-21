@@ -20,9 +20,9 @@ void randomFillBlocks();
 
 void doNextFit();
 
-void doFastFit();
+void doFirstFit();
 
-void doSortedFastFit();
+void doSortedFirstFit();
 
 void printResult();
 

@@ -2,12 +2,12 @@
 #include "algorithm.h"
 
 void printOne(const vector<vector<double>> &fit) {
-    for (const auto &vector:fit) {
-        cout << "[";
-        for (double processed:vector)
-            cout << processed << " ";
-        cout << "] sum: " << getSum(vector) << ";\n";
-    }
+//    for (const auto &vector:fit) {
+//        cout << "[";
+//        for (double processed:vector)
+//            cout << processed << " ";
+//        cout << "] sum: " << getSum(vector) << ";\n";
+//    }
     cout << "Size:" << fit.size();
 }
 
@@ -46,7 +46,7 @@ void doNextFit() {
     }
 }
 
-void doFastFit() {
+void doFirstFit() {
     for (double block : blocks) {
         if (fastFit.empty()) {
             fastFit.push_back({block});
@@ -66,7 +66,7 @@ void doFastFit() {
     }
 }
 
-void doSortedFastFit() {
+void doSortedFirstFit() {
     sort(blocks.begin(), blocks.end(), greater<double>());
     for (double block : blocks) {
         if (sortedFastFit.empty()) {
@@ -110,8 +110,8 @@ int main() {
     //for (double processed:blocks)
     //    cout << processed << "\t";
     doNextFit();
-    doFastFit();
-    doSortedFastFit();
+    doFirstFit();
+    doSortedFirstFit();
     printResult();
     return 0;
 }
